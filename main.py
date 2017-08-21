@@ -30,7 +30,7 @@ def main():
 def new_file():
     global name
     file = open("%s.txt" % (name), "w")
-    file.write("%s\'s Password Handbook" % (name) + "\n")
+    file.write("\n%s\'s Password Handbook" % (name) + "\n")
     file.write("***********************************\n")
     output(file)
     file.close()
@@ -39,6 +39,8 @@ def output(file):
     """This writes the 4 variables to a file."""
     end = "no"
     while (end.lower() == "no"):
+        print("\n")
+        print("\nIf you don't have an answer to the prompt, hit the enter button.")
         appname = input("Please enter the Website or Application name(ex. Wellsfargo.com): ")
         username = input("Please enter your username: ")
         password = input("Please enter your password: ")
@@ -56,37 +58,47 @@ def output(file):
 
         file.write("***********************************\n")
         end = input("Are you done typing in entries (yes or no)? ")
-
+"""
     add_note = input("Do you want to add a note section? ")
     while True:
         if (add_note.lower() == "no"): break
         elif (add_note == "yes"):
-            pass
+            add_note()
         else:
             print("Input yes or no only!")
             add_note = input("Do you want to add a note section? ")
-
+"""
 
 def resume_input():
     # need try catch fo file not found error
-    file = input("Please enter the exact file name: ")
-    file = open("%s.txt" % (file), "a")
-    output(file)
-    # add a system of code here that will allow you to add entries above the "Notes section"
+    filename = input("Please enter the exact file name: ")
+    file = open("%s.txt" % (filename), "w+")
+    with open("%s.txt" % (filename), "w+") as file:
+        data = file.readlines()
+        if (data == "Note Section:"):
+            for line in data:
+                if line == "Note Section:":
+                    new_data = output(file) + line
+                    file.write(new_data)
+        else:
+            output(filename)
 
 def update_entry():
     pass
 
-def quit_program():
-    print("Thank you for using the password manager!")
-    sys.exit(0)
+def add_note():
+    # ask user at end of entering entries if they want to add a note section
+    # add a new line after ** line to allow space for a note section
+    # if note section exists resume input if it exists
+    pass
 
-    """ Main Program """
+def quit_program():
+    print("\nThank you for using the password manager!")
+    sys.exit(0)
 
 """ Program Starts Here """
 
 name = input("Please enter your first and last name: ")
 print("\nWelcome to %s\'s Password Handbook Creator." % (name))
-print("\nIf you don't have an answer to the prompt, hit the enter button.")
 
 main()
